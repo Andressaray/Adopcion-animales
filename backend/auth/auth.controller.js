@@ -2,6 +2,7 @@ const User        = require('./auth.dao');
 const Pet         = require('./auth.dao.pets');
 const jwt         = require('jsonwebtoken');
 const bcrypt      = require('bcryptjs');
+const _           = require('lodash');
 const path        = require('path');
 const fs          = require('fs');
 let folderImages  = './public/images/';
@@ -177,7 +178,6 @@ exports.uploadImage = async (req, res) => {
     id:     req.params.id,
     name:   req.params.name
   };
-  console.log('datePhoto', datePhoto);
   if(!req.files){
     res.status(404).send({
       status: 'error',
@@ -211,7 +211,6 @@ exports.uploadImage = async (req, res) => {
         });
         return;
       }
-      console.log('Exito');      
     });
     Pet.findOne({ id: datePhoto.id, name: datePhoto.name }, async (err, petBefore) => {
       if(err || !petBefore){
@@ -282,7 +281,6 @@ exports.createPets = async (req, res) => {
       vaccinesO:  req.body.vaccinesO,
       vaccines:   req.body.vaccines
     };
-    console.log('newPet', newPet);
     const userExist = await this.preventUserInvalid(newPet.id);
     if(userExist){
       const petsUser = await Pet.countDocuments({ id: newPet.id });
@@ -295,7 +293,6 @@ exports.createPets = async (req, res) => {
       }
       const loopDatesPet = await this.loopDatesPet(newPet);
       if(loopDatesPet){
-        console.log('loopDatesPet', loopDatesPet);
         res.send({
           status: 'error',
           message:  loopDatesPet
@@ -314,7 +311,6 @@ exports.createPets = async (req, res) => {
     }
     
   } catch (error) {
-    console.log('error', error);
     res.status(500).send({
       status: 'error',
       message: 'Error el servidor no pudo procesar los datos'
@@ -356,7 +352,6 @@ exports.createPets = async (req, res) => {
 exports.showPets = async (req, res) => {
   if(!req) return res.status(500).send('Server error');
   const petList = await Pet.find({id : req.params.id});
-  console.log('petList', petList);
   let dataPet = [];
   _.forEach(petList, (value, index) => {
     dataPet[index] = {
@@ -377,13 +372,11 @@ exports.showPets = async (req, res) => {
 };
 
 exports.deletePets = (req, res) => {
-  console.log('req.params.imageUrl', req.params.imageUrl);
   const petDelete = {
     id:       parseInt(req.params.id),
     name:     req.params.name,
     imageUrl: req.params.imageUrl
   };
-  console.log('delete', petDelete);
   Pet.findOneAndRemove(
     { $and: [{ id: petDelete.id }, { name: petDelete.name }] },
     async (err, pet) => {
@@ -436,7 +429,6 @@ exports.updatePets = (req, res) => {
     vaccinesO:  req.body.vaccinesO,
     vaccines:   req.body.vaccines
   }
-  console.log('datePetUp', datePetUp);
   Pet.findOneAndUpdate({id: datePetUp.id, name: datePetUp.name}, { $set: {
     race:       datePetUp.race, 
     species:    datePetUp.species,

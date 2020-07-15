@@ -1,0 +1,18 @@
+.createPet{
+    margin-top: 8%;
+}
+.card-header:first-child{
+    background-color: salmon;
+}
+.card-deck{
+    margin-top: 3%;
+    text-align: center;
+}
+.card-img-top{
+    width: 50% !important;
+}
+@media (max-width: 992px) {
+    .card:first-child{
+        margin-top: 14%;
+    }
+}

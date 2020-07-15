@@ -1,0 +1,39 @@
+<app-header></app-header>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+      <div class="fadeIn first">
+        <img src="../../../assets/photos/circle-form.png" id="icon">
+      </div>
+      <form #frmRegister="ngForm" (submit)="onRegister()">
+        <input type="number"    name="id"        maxlength="20"   class="fadeIn second" placeholder="Cedula"   pattern="^[0-9]{5,10}$"   #id="ngModel" [(ngModel)]="user.id" required>
+        <div class="danger">
+          <small *ngIf="!id.valid && id.touched"><b>Cedula invalida</b></small>
+        </div>
+        <input type="text"      name="name"      maxlength="45"   class="fadeIn third"  placeholder="Nombre"    pattern="^[a-zA-Z]*$"  #name="ngModel" [(ngModel)]="user.name" required>
+        <div class="danger">
+          <small *ngIf="!name.valid && name.touched"><b>Nombre invalido</b></small>
+        </div>
+        <input type="text"      name="lastname"  maxlength="45"   class="fadeIn four"   placeholder="Apellido"  pattern="^[a-zA-Z]*$"  #lastname="ngModel" [(ngModel)]="user.lastname" required>
+        <div class="danger">
+          <small *ngIf="!lastname.valid && lastname.touched"><b>Apellido invalido</b></small>
+        </div>
+        <input type="number"    name="phone"     maxlength="10"   class="fadeIn five"   placeholder="Celular"  pattern="^[0-9]{10}$"   #phone="ngModel" [(ngModel)]="user.phone" required>
+        <div class="danger">
+          <small *ngIf="!phone.valid && phone.touched"><b>Celular invalido</b></small>
+        </div>
+        <input type="email"     name="email"     maxlength="50"   class="fadeIn six"    placeholder="Correo" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"     #email="ngModel" [(ngModel)]="user.email" required>
+        <div class="danger">
+          <small *ngIf="!email.valid && email.touched"><b>Correo invalidado</b></small>
+        </div>
+        <input type="password"  name="password"  maxlength="50"   class="fadeIn seven"  placeholder="Contraseña"  #password="ngModel" [(ngModel)]="user.password" required>
+        <div class="danger">
+          <small *ngIf="!password.valid && password.touched"><b>Contraseña invalida</b></small>
+        </div>
+        <button type="submit" class="fadeIn fourth" [disabled]="frmRegister.invalid">Registrarme</button>
+      </form>
+      <div id="formFooter">
+        <a class="underlineHover" [routerLink]="[ '../index' ]">Volver al inicio</a> &nbsp;&nbsp;
+        <a class="underlineHover" [routerLink]="[ '../login' ]">Iniciar Sesion</a>
+      </div>
+    </div>
+  </div>

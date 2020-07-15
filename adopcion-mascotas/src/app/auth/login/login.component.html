@@ -1,0 +1,27 @@
+<app-header></app-header>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+      <div class="fadeIn first">
+        <img src="../../../assets/photos/circle-register.png" id="icon" alt="foto">
+      </div>
+      <form #frmLogin="ngForm" (submit)="onLogin()">
+        <input type="email" maxlength="50" class="fadeIn second" name="email" placeholder="Correo" #email="ngModel" [(ngModel)]="user.email" required>
+        <div class="danger">
+          <small *ngIf="!email.valid && email.touched"><b>Email invalido</b></small>
+        </div>
+        <input type="password" maxlength="50" class="fadeIn third" name="password" placeholder="Contraseña" #password="ngModel" [(ngModel)]="user.password" required>
+        <div class="danger">
+          <small *ngIf="!password.valid && password.touched"><b>Contraseña invalida</b></small>
+        </div>
+        <button type="submit" class="fadeIn fourth" [disabled]="frmLogin.invalid">Entrar</button>
+        <br>
+        <!-- <button type="button" class="btn btn-info" (click)="information()"><fa-icon [icon]="faQuestionCircle"></fa-icon></button> -->
+      </form>
+      <div id="formFooter">
+        <a class="underlineHover" [routerLink]="[ '../index' ]">Volver al inicio</a>&nbsp;&nbsp;
+        <a class="underlineHover" [routerLink]="[ '../register' ]">Registrarse</a>
+        <br>
+        <a class="underlineHover" [routerLink]="[ '../#' ]">Olvide la contraseña</a>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,30 @@
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" [routerLink]="[ '../index' ]">Inicio</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" [routerLink]="[ '../pets' ]">Mascotas</a>
+                </li>
+                
+                <ng-container *ngIf="id!=0; else showRegister">
+                    <li class="nav-item active">
+                        <a class="nav-link" [routerLink]="[ '../logout' ]">Cerrar sesión</a>
+                    </li>
+                </ng-container>
+                <ng-template #showRegister>
+                    <li class="nav-item active">
+                        <a class="nav-link" [routerLink]="[ '../login' ]">Iniciar sesion</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" [routerLink]="[ '../register' ]">Registrarse</a>
+                    </li>
+                </ng-template>
+            </ul>
+        </div>
+    </nav>
+</header>
