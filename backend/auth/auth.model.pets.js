@@ -38,6 +38,9 @@ const petsSchema = new Schema ({
     },
     imageUrl: {
         type:       String
+    },
+    address: {
+        type:       String
     }
 }, {
     timestamps: true

@@ -9,6 +9,7 @@ module.exports  = (router) => {
   router.post('/uploadImage:name/:id', md_upload, Users.uploadImage);
   router.get('/getImagePet/:nameFile', Users.getImagePet);
   router.get('/showPets:id', Users.showPets);
+  router.post('/showPetsAll', Users.showPetsAll)
   router.delete('/deletePets:id/:name/:imageUrl', Users.deletePets);
   router.put('/updatePets', Users.updatePets);
 }

@@ -5,6 +5,7 @@ const bcrypt      = require('bcryptjs');
 const _           = require('lodash');
 const path        = require('path');
 const fs          = require('fs');
+const { values } = require('lodash');
 let folderImages  = './public/images/';
 const SECRET_KEY  = 'secretkey123456';
 
@@ -270,17 +271,19 @@ exports.getImagePet = async (req, res) => {
 }
 
 exports.createPets = async (req, res) => {
+  const newPet = {
+    id:         parseInt(req.body.id),
+    name:       req.body.name,
+    race:       req.body.race,
+    species:    req.body.species,
+    gender:     req.body.gender,
+    age:        req.body.age,
+    vaccinesO:  req.body.vaccinesO,
+    vaccines:   req.body.vaccines,
+    address:    req.body.address
+  };
+  console.log('newPet', newPet);
   try {
-    const newPet = {
-      id:         parseInt(req.body.id),
-      name:       req.body.name,
-      race:       req.body.race,
-      species:    req.body.species,
-      gender:     req.body.gender,
-      age:        req.body.age,
-      vaccinesO:  req.body.vaccinesO,
-      vaccines:   req.body.vaccines
-    };
     const userExist = await this.preventUserInvalid(newPet.id);
     if(userExist){
       const petsUser = await Pet.countDocuments({ id: newPet.id });
@@ -341,7 +344,9 @@ exports.createPets = async (req, res) => {
         gender:     pet.gender,
         age:        pet.age,
         vaccinesO:  pet.vaccinesO,
-        vaccines:   pet.vaccines
+        vaccines:   pet.vaccines,
+        imageUrl:   pet.imageUrl,
+        address:    pet.address
       }
       await res.send({ dataPet });
       return;
@@ -363,7 +368,8 @@ exports.showPets = async (req, res) => {
       age:        value.age,
       vaccinesO:  value.vaccinesO,
       vaccines:   value.vaccines,
-      imageUrl:   value.imageUrl
+      imageUrl:   value.imageUrl,
+      address:    value.address
     };
   });
   if(Object.keys(dataPet).length === 0) return res.send( dataPet );
@@ -417,6 +423,35 @@ exports.deletePets = (req, res) => {
     }
   );
 };
+
+exports.showPetsAll = async (req, res, next) => {
+ try {
+  let dataPet = [];
+  let dataResult = await Pet.find({});
+  _.forEach(dataResult, (value, index) =>{
+    dataPet[index] = {
+      id:         value.id,
+      name:       value.name,
+      race:       value.race,
+      species:    value.species,
+      gender:     value.gender,
+      age:        value.age,
+      vaccinesO:  value.vaccinesO,
+      vaccines:   value.vaccines,
+      imageUrl:   value.imageUrl,
+      address:    value.address
+    };
+  });
+  await res.send( dataPet )
+ } catch (error) {
+  res.status(500).send({
+    status: 'error',
+    message: 'Error el servidor no pudo procesar los datos'
+  });
+  return;
+ }
+  // });
+}
 
 exports.updatePets = (req, res) => {
   const datePetUp = {

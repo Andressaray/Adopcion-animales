@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500,
       });
-      this.router.navigateByUrl('/auth/index');
+      this.router.navigateByUrl('index');
     }
   }
   information(): void {

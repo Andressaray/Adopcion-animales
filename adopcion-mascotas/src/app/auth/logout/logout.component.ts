@@ -15,8 +15,8 @@ export class LogoutComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    if(localStorage.getItem('Name')){
-      let id = parseInt(localStorage.getItem('Id'));
+    if(localStorage.getItem('name')){
+      let id = parseInt(localStorage.getItem('id'));
       this.authService.logout({id}).subscribe(
         res => {
           Swal.fire({
@@ -35,10 +35,10 @@ export class LogoutComponent implements OnInit {
           });
         }
       )
-      this.router.navigateByUrl('/auth/index');
+      this.router.navigateByUrl('/');
     }
     else{
-      this.router.navigateByUrl('/auth/index');
+      this.router.navigateByUrl('/');
     }
   }
 

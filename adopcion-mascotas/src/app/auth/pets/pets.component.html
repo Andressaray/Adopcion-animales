@@ -1,73 +1,186 @@
 <app-header></app-header>
 <div class="container">
-    <div class="createPet">
-        <div class="card">
-            <div class="card-header">
-             No puedes tener más a tu mascota
-            </div>
-            <div class="card-body">
-              <!-- <h5 class="card-title">Special title treatment</h5> -->
-              <p class="card-text">Si no puedes tener a tu mascota, y deseas ponerla en adopción </p>
-              <button class="btn btn-success" data-toggle="modal" data-target="#exampleModal">Poner en adopción a mi mascota</button>
-            </div>
-          </div>
-    </div>
-    <div class="card-deck">
-        <div class="card" align="center">
-          <img src="../../../assets/photos/circle-form.png" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title"><b>Lulu</b></h5>
-            <p class="card-text"><b>Sexo:</b> Femenino <b>Edad: </b>23 Meses</p>
-            <p class="card-text"><b>Especie: </b>Perro  <b>Raza: </b>Pitbull</p>
-            <p class="card-text"><b>Esta vacunado: </b>No</p>
-            <button class="btn btn-success">¡Adoptar!</button>
-            <p class="card-text"><small class="text-muted"><b>Dirección: </b>Calle 10 # 41 - 39</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-          </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="recipient-name" class="col-form-label">Recipient:</label>
-                <input type="text" class="form-control" id="recipient-name">
-              </div>
-              <div class="form-group">
-                <label for="message-text" class="col-form-label">Message:</label>
-                
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-          </div>
-        </div>
+  <div class="createPet" id="createPet">
+    <div class="card">
+      <div class="card-header">
+        No puedes tener más a tu mascota
+      </div>
+      <div class="card-body">
+        <!-- <h5 class="card-title">Special title treatment</h5> -->
+        <p class="card-text">Si no puedes tener a tu mascota, y deseas ponerla en adopción </p>
+        <button class="btn btn-success" data-toggle="modal" data-target="#exampleModal" (click)="showFormulary()">Poner en adopción a mi
+          mascota</button>
       </div>
     </div>
+  </div>
+  <div class="card-deck" id="card-deck">
+    <div class="card" align="center">
+      <img src="../../../assets/photos/circle-form.png" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title"><b>Lulu</b></h5>
+        <p class="card-text"><b>Sexo:</b> Femenino <b>Edad: </b>23 Meses</p>
+        <p class="card-text"><b>Especie: </b>Perro <b>Raza: </b>Pitbull</p>
+        <p class="card-text"><b>Esta vacunado: </b>No</p>
+        <button class="btn btn-success">¡Adoptar!</button>
+        <p class="card-text"><small class="text-muted"><b>Dirección: </b>Calle 10 # 41 - 39</small></p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card formulary" id="formulary" hidden>
+    <div class="card-body">
+      <h5 class="card-title">Crear mascota</h5>
+      <form #formCreatePets="ngForm" (submit)="onCreatePets()">
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Nombre:</label>
+          <input type="text" class="form-control" name="name" placeholder="Nombre de la mascota" #name="ngModel"
+            [(ngModel)]="pet.name" pattern="[a-zA-Z]*" maxlength="20" required>
+          <div class="danger">
+            <small *ngIf="!name.valid && name.touched">¡Nombre no valido!</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="recipient-race" class="col-form-label">Raza:</label>
+          <select class="form-control" name="race" #race="ngModel" [(ngModel)]="pet.race" required (change)="onChangeRace($event.target.value)">
+            <option value="{{ petList.key }}" *ngFor="let petList of listPets | keyvalue"> {{ petList.key| uppercase }}</option>
+          </select>
+          <div class="danger">
+            <small *ngIf="!race.valid && race.touched">
+              ¡Tienes que elegir una raza!
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message-text" class="col-form-label">Especie:</label>
+          <select class="form-control" name="species" #species="ngModel" [(ngModel)]="pet.species" required>
+            <option value="{{ races.value.race }}" *ngFor="let races of raceReturn |keyvalue">
+              {{ races.value.race | uppercase }}</option>
+          </select>
+          <div class="danger">
+            <small *ngIf="!species.valid && species.touched">
+              ¡Tienes que elegir una especie!
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Genero:</label>
+          <select class="form-control" name="gender" #gender="ngModel" [(ngModel)]="pet.gender" required>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Edad en meses:</label>
+          <input type="number" class="form-control" name="age" placeholder="Cuantos años tiene la mascota"
+            #age="ngModel" [(ngModel)]="pet.age" pattern="[0-9]+" [min]="0" [max]="220" required>
+          <div class="danger">
+            <small *ngIf="!age.valid && age.touched">¡La edad no es valida!</small>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">¿Esta vacunado?</label>
+          <select class="form-control" name="vaccinesO" #vaccinesO="ngModel" [(ngModel)]="pet.vaccinesO" required>
+            <option value="Si">Si</option>
+            <option value="No">No</option>
+          </select>
+          <div class="danger">
+            <small *ngIf="!vaccinesO.valid && vaccinesO.touched">¡Debes seleccionar si esta vacunada tu
+              mascota!</small>
+          </div>
+        </div>
+        <ng-container *ngIf="pet.vaccinesO == 'Si'">
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Que vacunas tiene:</label>
+            <input type="text" class="form-control" name="vaccines" placeholder="Vacunas" #vaccines="ngModel"
+              [(ngModel)]="pet.vaccines" required>
+            <div class="danger">
+              <small *ngIf="!vaccines.valid && vaccines.touched">¡Debes ingresar si tiene Vacunas</small>
+            </div>
+          </div>
+        </ng-container>
+        <button type="submit" class="btn btn-primary" [disabled]="formCreatePets.invalid">Crear Mascota</button>
+        <button type="button" class="btn btn-secondary" (click)="close()">Cerrar</button>
+      </form>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!-- <div class="col" id="formulary" hidden>
+    <form #formCreatePets="ngForm" (submit)="onCreatePets()">
+      <div class="form-group">
+        <label for="recipient-name" class="col-form-label">Nombre:</label>
+        <input type="text" class="form-control" name="name" placeholder="Nombre de la mascota" #name="ngModel"
+          [(ngModel)]="pet.name" pattern="[a-zA-Z]*" maxlength="20" required>
+        <div class="danger">
+          <small *ngIf="!name.valid && name.touched">¡Nombre no valido!</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="recipient-race" class="col-form-label">Raza:</label>
+        <select class="form-control" name="race" #race="ngModel" [(ngModel)]="pet.race" required (change)="onChangeRace($event.target.value)">
+          <option value="{{ petList.key }}" *ngFor="let petList of listPets | keyvalue"> {{ petList.key| uppercase }}</option>
+        </select>
+        <div class="danger">
+          <small *ngIf="!race.valid && race.touched">
+            ¡Tienes que elegir una raza!
+          </small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="message-text" class="col-form-label">Especie:</label>
+        <select class="form-control" name="species" #species="ngModel" [(ngModel)]="pet.species" required>
+          <option value="{{ races.value.race }}" *ngFor="let races of raceReturn |keyvalue">
+            {{ races.value.race | uppercase }}</option>
+        </select>
+        <div class="danger">
+          <small *ngIf="!species.valid && species.touched">
+            ¡Tienes que elegir una especie!
+          </small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="recipient-name" class="col-form-label">Genero:</label>
+        <select class="form-control" name="gender" #gender="ngModel" [(ngModel)]="pet.gender" required>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="recipient-name" class="col-form-label">Edad en meses:</label>
+        <input type="number" class="form-control" name="age" placeholder="Cuantos años tiene la mascota"
+          #age="ngModel" [(ngModel)]="pet.age" pattern="[0-9]+" [min]="0" [max]="220" required>
+        <div class="danger">
+          <small *ngIf="!age.valid && age.touched">¡La edad no es valida!</small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="recipient-name" class="col-form-label">¿Esta vacunado?</label>
+        <select class="form-control" name="vaccinesO" #vaccinesO="ngModel" [(ngModel)]="pet.vaccinesO" required>
+          <option value="Si">Si</option>
+          <option value="No">No</option>
+        </select>
+        <div class="danger">
+          <small *ngIf="!vaccinesO.valid && vaccinesO.touched">¡Debes seleccionar si esta vacunada tu
+            mascota!</small>
+        </div>
+      </div>
+      <ng-container *ngIf="pet.vaccinesO == 'Si'">
+        <div class="form-group">
+          <label for="recipient-name" class="col-form-label">Que vacunas tiene:</label>
+          <input type="text" class="form-control" name="vaccines" placeholder="Vacunas" #vaccines="ngModel"
+            [(ngModel)]="pet.vaccines" required>
+          <div class="danger">
+            <small *ngIf="!vaccines.valid && vaccines.touched">¡Debes ingresar si tiene Vacunas</small>
+          </div>
+        </div>
+      </ng-container>
+      <button type="submit" class="btn btn-primary" [disabled]="formCreatePets.invalid">Crear Mascota</button>
+      <button type="button" class="btn btn-secondary" (click)="close()">Cerrar</button>
+    </form>
+  </div> -->
 </div>

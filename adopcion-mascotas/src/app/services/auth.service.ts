@@ -2,11 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { tap } from 'rxjs/operators';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, from } from 'rxjs';
 
-import { UserI } from '../models/userI';
-import { JwtResponseI } from '../models/jwt-response';
-import { UserD } from '../models/userD';
+import { JwtResponseI }     from '../models/jwt-response';
+import { UserI }            from '../models/userI';
+import { UserD }            from '../models/userD';
+import { JwtResponsePets }  from '../models/jwt-response-pets';
+import { PetU }             from '../models/petU';
+import { PetD }             from '../models/petD';
+
+import Swal                 from 'sweetalert2';
 
 @Injectable()
 export class AuthService {
@@ -57,15 +62,59 @@ export class AuthService {
     this.token = '';
     localStorage.removeItem('ACCESS_TOKEN');
     localStorage.removeItem('EXPIRES_IN');
-    localStorage.removeItem('Name');
-    localStorage.removeItem('Id');
-    localStorage.removeItem('profile');
+    localStorage.removeItem('name');
+    localStorage.removeItem('id');
     return this.httpClient.post<JwtResponseI>(`${this.AUTH_SERVER}/logout`, id);
   }
 
   getJson(): any {
     return this.httpClient.get(this.url);
   }
+
+  createPet(pet: any): Observable <JwtResponsePets> {
+    console.log('pet', pet);
+    
+    return this.httpClient.post<JwtResponsePets>(`${this.AUTH_SERVER}/pets`,
+      pet).pipe(tap(
+        (res: JwtResponsePets) => {
+          console.log('pets >>', res)
+          Swal.fire({
+            icon: 'success',
+            title: 'Mascota creada con exito',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }, 
+        (error) => {
+          console.log('error', error);
+          
+          Swal.fire({
+            icon: 'error',
+            title: error.error.message,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        })
+      );
+  }
+
+  showPet(id: number){
+    return this.httpClient.get<JwtResponsePets>(`${this.AUTH_SERVER}/showPets${id}`);
+  }
+
+  showPets(id?: number){
+    return this.httpClient.post<JwtResponsePets[]>(`${this.AUTH_SERVER}/showPetsAll`, id);
+  }
+
+
+  deletePet(pet: PetD){
+    return this.httpClient.delete(`${this.AUTH_SERVER}/deletePets${pet.id}/${pet.name}/${pet.imageUrl}`);
+  }
+
+  updatePet(pet: PetU): Observable <JwtResponsePets> {
+    return this.httpClient.put<JwtResponsePets>(`${this.AUTH_SERVER}/updatePets`, pet);
+  }
+
 
   private saveToken(
     token: string,
@@ -75,8 +124,8 @@ export class AuthService {
   ): void {
     localStorage.setItem('ACCESS_TOKEN', token);
     localStorage.setItem('EXPIRES_IN', expiresIn);
-    localStorage.setItem('Name', name);
-    localStorage.setItem('Id', String(id));
+    localStorage.setItem('name', name);
+    localStorage.setItem('id', String(id));
     this.token = token;
   }
 }

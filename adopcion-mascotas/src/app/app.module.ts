@@ -1,8 +1,14 @@
 import { BrowserModule }        from '@angular/platform-browser';
+import { BrowserAnimationsModule }    from '@angular/platform-browser/animations';
 import { NgModule }             from '@angular/core';
-import { FormsModule }          from '@angular/forms';
+import { FormsModule,ReactiveFormsModule }          from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule }     from '@angular/common/http';
+
+import { MatInputModule  }      from '@angular/material/input';
+import { TextFieldModule }      from '@angular/cdk/text-field';
+import { MatSelectModule }      from '@angular/material/select';
+import { PlatformModule }       from '@angular/cdk/platform';
 
 import { AppComponent }         from './app.component';
 import { LoginComponent }       from './auth/login/login.component';
@@ -16,13 +22,13 @@ import { AuthService }          from './services/auth.service';
 import { HeaderComponent }      from './auth/header/header.component';
 
 const routes: Routes = [
-  { path:  '',              component:  IndexComponent },
-  { path: 'auth/index',     component: IndexComponent }, 
-  { path:  'auth/pets',     component: PetsComponent },
-  { path:  'auth/login',    component: LoginComponent },
-  { path:  'auth/register', component: RegisterComponent },
-  { path:  'auth/logout',   component: LogoutComponent },
-  { path:  '**',            component:  ErrorComponent }
+  { path:  '',         component: IndexComponent },
+  { path:  'index',    component: IndexComponent }, 
+  { path:  'pets',     component: PetsComponent },
+  { path:  'login',    component: LoginComponent },
+  { path:  'register', component: RegisterComponent },
+  { path:  'logout',   component: LogoutComponent },
+  { path:  '**',       component: ErrorComponent }
 ];
 
 @NgModule({
@@ -38,7 +44,13 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    TextFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    PlatformModule,
     FormsModule,
     AppRoutingModule,
     RouterModule.forRoot(routes)
