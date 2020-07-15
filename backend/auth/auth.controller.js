@@ -5,7 +5,6 @@ const bcrypt      = require('bcryptjs');
 const _           = require('lodash');
 const path        = require('path');
 const fs          = require('fs');
-const { values } = require('lodash');
 let folderImages  = './public/images/';
 const SECRET_KEY  = 'secretkey123456';
 
@@ -176,9 +175,10 @@ exports.signout = (req, res) => {
 
 exports.uploadImage = async (req, res) => {
   const datePhoto = {
-    id:     req.params.id,
-    name:   req.params.name
+    id:     parseInt(req.params.id),
+    name:   req.params.name.toUpperCase()
   };
+  console.log('datePhoto', datePhoto);
   if(!req.files){
     res.status(404).send({
       status: 'error',
@@ -186,6 +186,7 @@ exports.uploadImage = async (req, res) => {
     });
     return;
   }
+  console.log('req.files', req.files.file0);
   let filePath        = req.files.file0.path;
   let fileSplit       = filePath.split('\\');
   // let fileSplit       = filePath.split('/'); servidor linux o mac
@@ -214,7 +215,7 @@ exports.uploadImage = async (req, res) => {
       }
     });
     Pet.findOne({ id: datePhoto.id, name: datePhoto.name }, async (err, petBefore) => {
-      if(err || !petBefore){
+      if(err){
         res.status(404).send({
           status: 'error',
           message: 'La mascota no existe'
@@ -222,9 +223,11 @@ exports.uploadImage = async (req, res) => {
         return;
       }
       else{
+        console.log('petBefore', petBefore);
         const fileNameBefore = petBefore.imageUrl;
         if(fileName != fileNameBefore){
           const contentFileNameBefore = folderImages+fileNameBefore;
+          console.log('contentFileNameBefore',contentFileNameBefore );
           fs.unlink(contentFileNameBefore, (exist) => {
           });
         }
@@ -241,10 +244,10 @@ exports.uploadImage = async (req, res) => {
         return;
       }
       else {
-        // return res.send({
-        //   status: 'success',
-        //   message: 'Imagen guardada con exito'
-        // });
+        return res.send({
+          status: 'success',
+          message: 'Imagen guardada con exito'
+        });
       }
     });
   }
@@ -354,28 +357,28 @@ exports.createPets = async (req, res) => {
   }
 };
 
-exports.showPets = async (req, res) => {
-  if(!req) return res.status(500).send('Server error');
-  const petList = await Pet.find({id : req.params.id});
-  let dataPet = [];
-  _.forEach(petList, (value, index) => {
-    dataPet[index] = {
-      id:         value.id,
-      name:       value.name,
-      race:       value.race,
-      species:    value.species,
-      gender:     value.gender,
-      age:        value.age,
-      vaccinesO:  value.vaccinesO,
-      vaccines:   value.vaccines,
-      imageUrl:   value.imageUrl,
-      address:    value.address
-    };
-  });
-  if(Object.keys(dataPet).length === 0) return res.send( dataPet );
-  await res.send( dataPet );
-  return;  
-};
+// exports.showPets = async (req, res) => {
+//   if(!req) return res.status(500).send('Server error');
+//   const petList = await Pet.find({id : req.params.id});
+//   let dataPet = [];
+//   _.forEach(petList, (value, index) => {
+//     dataPet[index] = {
+//       id:         value.id,
+//       name:       value.name,
+//       race:       value.race,
+//       species:    value.species,
+//       gender:     value.gender,
+//       age:        value.age,
+//       vaccinesO:  value.vaccinesO,
+//       vaccines:   value.vaccines,
+//       imageUrl:   value.imageUrl,
+//       address:    value.address
+//     };
+//   });
+//   if(Object.keys(dataPet).length === 0) return res.send( dataPet );
+//   await res.send( dataPet );
+//   return;  
+// };
 
 exports.deletePets = (req, res) => {
   const petDelete = {
@@ -439,7 +442,8 @@ exports.showPetsAll = async (req, res, next) => {
       vaccinesO:  value.vaccinesO,
       vaccines:   value.vaccines,
       imageUrl:   value.imageUrl,
-      address:    value.address
+      address:    value.address,
+      adopted:    value.adopted
     };
   });
   await res.send( dataPet )
@@ -456,21 +460,11 @@ exports.showPetsAll = async (req, res, next) => {
 exports.updatePets = (req, res) => {
   const datePetUp = {
     id:         req.body.id,
-    name:       req.body.name,
-    race:       req.body.race,
-    species:    req.body.species,
-    gender:     req.body.gender,
-    age:        req.body.age,
-    vaccinesO:  req.body.vaccinesO,
-    vaccines:   req.body.vaccines
+    name:       req.body.name
   }
   Pet.findOneAndUpdate({id: datePetUp.id, name: datePetUp.name}, { $set: {
-    race:       datePetUp.race, 
-    species:    datePetUp.species,
-    gender:     datePetUp.gender,
-    age:        datePetUp.age,
-    vaccinesO:  datePetUp.vaccinesO,
-    vaccines:   datePetUp.vaccines }}, async (err, petU) => {
+    adopted: "Si"
+  }}, async (err, petU) => {
       if (err) {
         res.status(500).send({
           status: 'error',

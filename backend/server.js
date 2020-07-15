@@ -7,6 +7,7 @@ const DB          = require('./config/db');
 const bodyParser  = require('body-parser')
 // init DB
 DB();
+
 const app                   = express();
 const router                = express.Router();
 const bodyParserJSON        = bodyParser.json();

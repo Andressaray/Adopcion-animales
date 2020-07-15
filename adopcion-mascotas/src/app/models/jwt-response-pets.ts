@@ -1,6 +1,6 @@
 export interface JwtResponsePets {
     dataPet: {
-        id?:        number,
+        id:         number,
         name:       string,
         race:       string,
         species:    string,
@@ -8,6 +8,8 @@ export interface JwtResponsePets {
         age:        number,
         vaccinesO:  string,
         vaccines:   string,
-        imageUrl:   string
+        imageUrl?:   string,
+        addres?:    string,
+        adopted?:   string,
     }
 }

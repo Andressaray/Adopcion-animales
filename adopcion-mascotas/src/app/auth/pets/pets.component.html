@@ -13,20 +13,38 @@
       </div>
     </div>
   </div>
-  <div class="card-deck" id="card-deck">
-    <div class="card" align="center">
-      <img src="../../../assets/photos/circle-form.png" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title"><b>Lulu</b></h5>
-        <p class="card-text"><b>Sexo:</b> Femenino <b>Edad: </b>23 Meses</p>
-        <p class="card-text"><b>Especie: </b>Perro <b>Raza: </b>Pitbull</p>
-        <p class="card-text"><b>Esta vacunado: </b>No</p>
-        <button class="btn btn-success">¡Adoptar!</button>
-        <p class="card-text"><small class="text-muted"><b>Dirección: </b>Calle 10 # 41 - 39</small></p>
-      </div>
-    </div>
+  <div class="buttons">
+    <button class="btn btn-warning">Mascotas sin hogar</button>
+    <button class="btn btn-dark">Mi mascota en adopción</button>
+    <button class="btn btn-info">Todas las mascotas adoptadas</button>
   </div>
-
+  <div class="disable-pets" id="disable-pets">
+    <ng-container *ngFor="let adoptedPets of petsAdopted">
+    <div class="container-pets" >
+        <div class="card-deck" >
+          <div class="card" align="center">
+            <ng-container *ngIf="adoptedPets.imageUrl; else noimage">
+              <img class="card-img-top" src="{{ url+ '/getImagePet/' + adoptedPets.imageUrl }}" alt="Imagen"
+                title="{{ adoptedPets.name }}"><br>
+            </ng-container>
+            <ng-template #noimage>
+              <img class="card-img-top" src="../../../assets/photos/circle-form.png" alt="Imagen"
+                title="{{ adoptedPets.name }}"><br>
+            </ng-template>
+            <div class="card-body">
+              <h5 class="card-title"><b>{{ adoptedPets.name }}</b></h5>
+              <p class="card-text"><b>Sexo:</b> {{ adoptedPets.gender }} <b>Edad: </b>{{ adoptedPets.age }} Meses</p>
+              <p class="card-text"><b>Especie: </b>{{ adoptedPets.species }} <b>Raza: </b>{{ adoptedPets.race }}</p>
+              <p class="card-text"><b>Esta vacunado: </b>{{ adoptedPets.vaccinesO }}</p>
+              <button class="btn btn-success" (click)="onAdopted(adoptedPets)">¡Adoptar!</button>
+              <p class="card-text"><small class="text-muted"><b>Dirección: </b>{{ adoptedPets.address }}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  
 
   <div class="card formulary" id="formulary" hidden>
     <div class="card-body">
@@ -99,6 +117,9 @@
             </div>
           </div>
         </ng-container>
+        <angular-file-uploader [config]="afuConfig" (ApiResponse)="uploadImageResponse($event)"
+                (click)="uploadPhoto(pet.name)">
+              </angular-file-uploader>
         <button type="submit" class="btn btn-primary" [disabled]="formCreatePets.invalid">Crear Mascota</button>
         <button type="button" class="btn btn-secondary" (click)="close()">Cerrar</button>
       </form>

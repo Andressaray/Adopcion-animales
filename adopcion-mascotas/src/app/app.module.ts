@@ -9,6 +9,7 @@ import { MatInputModule  }      from '@angular/material/input';
 import { TextFieldModule }      from '@angular/cdk/text-field';
 import { MatSelectModule }      from '@angular/material/select';
 import { PlatformModule }       from '@angular/cdk/platform';
+import { AngularFileUploaderModule }     from 'angular-file-uploader';
 
 import { AppComponent }         from './app.component';
 import { LoginComponent }       from './auth/login/login.component';
@@ -52,6 +53,7 @@ const routes: Routes = [
     MatInputModule,
     PlatformModule,
     FormsModule,
+    AngularFileUploaderModule,
     AppRoutingModule,
     RouterModule.forRoot(routes)
   ],

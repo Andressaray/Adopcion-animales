@@ -41,6 +41,9 @@ const petsSchema = new Schema ({
     },
     address: {
         type:       String
+    },
+    adopted: {
+        type:       String
     }
 }, {
     timestamps: true

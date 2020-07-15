@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+
+import Swal                 from 'sweetalert2';
+// import * as _ from 'lodash-es';
+import * as _ from 'lodash';
 import { HeaderComponent } from '../header/header.component';
 import { AuthService } from '../../services/auth.service';
-import Swal from 'sweetalert2';
-import * as _ from 'lodash-es';
-// import { keys } from 'lodash-es';
 @Component({
   selector: 'app-pets',
   templateUrl: './pets.component.html',
@@ -13,9 +14,13 @@ import * as _ from 'lodash-es';
 export class PetsComponent {
   url: string = this.authService.AUTH_SERVER;
   pet: any;
+  petsAdopted: any;
+  myPetsForAdopted: any;
+  petsNotHome: any;
   id: number = parseInt(localStorage.getItem('id'));
   listPets: any;
   raceReturn: any;
+  afuConfig;
   constructor(private authService: AuthService, private router: Router) {
     this.pet = {
       id: this.id,
@@ -31,11 +36,12 @@ export class PetsComponent {
   ngOnInit(): void {
     this.getJson();
     this.onShowPets();
+    this.uploadPhoto('');
   }
   getJson(): void {
     this.authService.getJson().subscribe(
       (res) => {
-        return (this.listPets = { ...res });
+        return this.listPets = { ...res };
         // console.log('this.lisPets', this.listPets);
       },
       (error) => {
@@ -103,7 +109,10 @@ export class PetsComponent {
   onShowPets(): void {
     this.authService.showPets().subscribe(
       (res) => {
+        this.petsAdopted = res;
+
         console.log('res', res);
+        // this.petsNotHome = 
       },
       (error) => {
         console.log('error', error);
@@ -112,13 +121,97 @@ export class PetsComponent {
   }
 
   showFormulary(): void {
-    document.getElementById('card-deck').hidden = true;
+    document.getElementById('disable-pets').hidden = true;
     document.getElementById('createPet').hidden = true;
     document.getElementById('formulary').hidden = false;
   }
+
   close(): void {
     document.getElementById('formulary').hidden = true;
-    document.getElementById('card-deck').hidden = false;
+    document.getElementById('disable-pets').hidden = false;
     document.getElementById('createPet').hidden = false;
   }
+
+  onAdopted(pet): void{
+    const petU = {
+      id:     parseInt(pet.id),
+      name:   pet.name
+    };
+    this.authService.adoptedPet(petU).subscribe(
+    (res) => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Felicitaciones',
+        text: `Nos alegra saber que ${petU.name} tendra un hogar que lo cuidará`
+      });
+    },
+    (error) => {
+      console.log('error', error);
+    })
+  }
+
+  uploadPhoto(name) {
+    const datos = {
+      id:     this.pet.id,
+      name:   name
+    };
+    console.log(datos);
+    return this.afuConfig = {
+      multiple: false,
+      formatsAllowed: ".jpg,.png,.jpeg",
+      maxSize: "20",
+      uploadAPI: {
+        url: `${this.authService.AUTH_SERVER}/uploadImage${datos.name}/${datos.id}`,
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=UTF-8",
+        },
+        params: {
+          'page': '1',
+        },
+        responseType: "blob",
+      },
+        theme: "attachPin",
+        hideProgressBar: true,
+        hideResetBtn: true,
+        hideSelectBtn: false,
+        fileNameIndex: true,
+        replaceTexts: {
+        selectFileBtn: "Select Files",
+        resetBtn: "Reset",
+        uploadBtn: "Upload",
+        dragNDropBox: "Drag N Drop",
+        attachPinBtn: "Imagen de tu mascota",
+        afterUploadMsg_success: "Successfully Uploaded !",
+        afterUploadMsg_error: "Upload Failed !",
+        sizeLimit: "Size Limit",
+      },
+    };
+  }
+
+  uploadImageResponse(data): void{
+    Swal.fire({
+      icon: 'success',
+      text: 'Imagen actualizada con exito',
+      showConfirmButton: false,
+      timer:3000
+    });
+    setTimeout(() => {
+      this.onShowPets();
+    }, 3000);
+  }
+
+  getImage(nameFile){
+    console.log('nameFile', nameFile);
+    if(nameFile){
+      this.authService.getImagePet(nameFile).subscribe(
+        response => {
+          console.log('exito');
+        },
+        error => {
+          console.log('error');
+        }
+      )
+      }
+    }
 }

@@ -111,10 +111,13 @@ export class AuthService {
     return this.httpClient.delete(`${this.AUTH_SERVER}/deletePets${pet.id}/${pet.name}/${pet.imageUrl}`);
   }
 
-  updatePet(pet: PetU): Observable <JwtResponsePets> {
+  adoptedPet(pet: PetU): Observable <JwtResponsePets> {
     return this.httpClient.put<JwtResponsePets>(`${this.AUTH_SERVER}/updatePets`, pet);
   }
 
+  getImagePet(nameFile: string){
+    return this.httpClient.get(`${this.AUTH_SERVER}/getImagePet/${nameFile}`);
+  }
 
   private saveToken(
     token: string,

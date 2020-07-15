@@ -4,12 +4,32 @@
 .card-header:first-child{
     background-color: salmon;
 }
-.card-deck{
+.container-pets{
     margin-top: 3%;
     text-align: center;
+    width: 31%;
+    display: inline-block;
+    margin-right: 2%;
 }
+
+.container-pets > div:nth-child(1){
+    margin-left: 3%;
+}
+
+.buttons{
+    margin-top: 5px;
+    text-align: center;
+}
+.buttons > button{
+    margin-right: 2%;
+}
+
+
 .card-img-top{
-    width: 50% !important;
+    width: 66% !important;
+    margin-bottom: -23px;
+    margin-top: 20px;
+    border-radius: 6%;
 }
 .danger{
     font-family: cursive;
@@ -30,9 +50,12 @@
     .container > div:nth-child(1){
         margin-top: 14% !important;
     }
-    /* .card:first-child{
-        margin-top: 14% !important;
-    } */
+    .container-pets{
+        margin-top: 3%;
+        margin-left: 8%;
+        text-align: center;
+        width: 80%;
+    }
     .formulary{
         left: 15%;
         width: 70%;
