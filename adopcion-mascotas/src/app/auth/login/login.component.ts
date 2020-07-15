@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     this.prevent();
   }
   prevent(): void {
-    if (localStorage.getItem('Id')) {
+    if (localStorage.getItem('id')) {
       Swal.fire({
         icon: 'info',
         title: 'Ya tienes una sesión abierta',
